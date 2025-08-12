@@ -1,19 +1,27 @@
 pipeline {
+
     agent any
 
     stages {
-        stage('Run Test') {
+        stage('Start Grid') {
             steps {
-                echo 'Docker compose up...'
-                sh 'docker-compose up -d'
+                echo 'Starting Selenium Grid...'
+                bat 'docker-compose -f grid.yaml up -d'
             }
         }
-        stage('Bring Down') {
+        stage('Run Tests') {
             steps {
-                echo 'Docker compose down...'
-                sh 'docker-compose down'
+                echo 'Running tests...'                
+                bat 'docker-compose -f testsuites.yaml up'
             }
         }
-        
+              
+    }
+    post {
+        always {
+            echo 'Cleaning up...'
+            bat 'docker-compose -f grid.yaml down'
+            bat 'docker-compose -f testsuites.yaml down'
+        }
     }
 }
