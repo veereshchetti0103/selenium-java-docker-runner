@@ -2,17 +2,21 @@ pipeline {
 
     agent any
 
+    parameters {
+         choice choices: ['chrome', 'firefox'], description: 'Select the browser', name: 'Browser'
+   }
+
     stages {
         stage('Start Grid') {
             steps {
                 echo 'Starting Selenium Grid...'
-                bat 'docker-compose -f grid.yaml up -d'
+                sh 'docker-compose -f grid.yaml up --scale ${params.Browser}=2 -d'
             }
         }
         stage('Run Tests') {
             steps {
                 echo 'Running tests...'                
-                bat 'docker-compose -f test-suites.yaml up'
+                sh 'docker-compose -f testsuites.yaml up'
             }
         }
               
@@ -20,8 +24,8 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            bat 'docker-compose -f grid.yaml down'
-            bat 'docker-compose -f test-suites.yaml down'
+            sh 'docker-compose -f grid.yaml down'
+            sh 'docker-compose -f testsuites.yaml down'
             archiveArtifacts artifacts: 'output/flight-reservation/emailable-report.html', allowEmptyArchive: true ,followSymlinks: false
             archiveArtifacts artifacts: 'output/vendor-portal/emailable-report.html', allowEmptyArchive: true, followSymlinks: false
         }
