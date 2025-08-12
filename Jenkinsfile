@@ -12,7 +12,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 echo 'Running tests...'                
-                bat 'docker-compose -f testsuites.yaml up'
+                bat 'docker-compose -f test-suites.yaml up'
             }
         }
               
