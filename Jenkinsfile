@@ -21,7 +21,7 @@ pipeline {
         always {
             echo 'Cleaning up...'
             bat 'docker-compose -f grid.yaml down'
-            bat 'docker-compose -f testsuites.yaml down'
+            bat 'docker-compose -f test-suites.yaml down'
         }
     }
 }
