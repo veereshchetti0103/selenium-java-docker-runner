@@ -10,7 +10,7 @@ pipeline {
         stage('Start Grid') {
             steps {
                 echo 'Starting Selenium Grid...'
-                bat 'docker-compose -f grid.yaml up --scale ${params.Browser}=2 -d'
+                bat 'docker-compose -f grid.yaml up --scale %params.Browser%=2 -d'
             }
         }
         stage('Run Tests') {
