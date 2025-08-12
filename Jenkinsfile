@@ -6,13 +6,13 @@ pipeline {
         stage('Start Grid') {
             steps {
                 echo 'Starting Selenium Grid...'
-                sh 'docker-compose -f grid.yaml up -d'
+                bat 'docker-compose -f grid.yaml up -d'
             }
         }
         stage('Run Tests') {
             steps {
                 echo 'Running tests...'                
-                sh 'docker-compose -f testsuites.yaml up'
+                bat 'docker-compose -f testsuites.yaml up'
             }
         }
               
@@ -20,8 +20,8 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            sh 'docker-compose -f grid.yaml down'
-            sh 'docker-compose -f testsuites.yaml down'
+            bat 'docker-compose -f grid.yaml down'
+            bat 'docker-compose -f testsuites.yaml down'
         }
     }
 }
