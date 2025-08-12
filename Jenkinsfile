@@ -17,6 +17,12 @@ pipeline {
             steps {
                 echo 'Running tests...'                
                 bat 'docker-compose -f test-suites.yaml up'
+                script{
+                    if(fileExists('output/flight-reservation/testng-failed-report.html') || fileExists('output/vendor-portal/testng-failed-report.html')) {
+                        echo 'Flight Reservation or Vendor Portal tests failed.'
+                        error 'Tests failed.'
+                    }
+                }
             }
         }
               
